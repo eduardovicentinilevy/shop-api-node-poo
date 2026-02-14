@@ -1,43 +1,33 @@
-Aqui está o conteúdo para o seu ficheiro README.md, estruturado com tópicos claros e totalmente livre de emojis, conforme solicitado:
+Esta API de E-commerce foi desenvolvida para demonstrar o domínio de conceitos avançados de Backend com Node.js. O projeto utiliza Programação Orientada a Objetos para gerenciar o ciclo de vida de produtos, usuários e pedidos, garantindo uma estrutura de código modular e de fácil manutenção.
 
-Shop API Node POO
-Sobre o Projeto
-Esta é uma API RESTful para E-commerce desenvolvida com Node.js e Express. O foco principal deste projeto é demonstrar a aplicação de arquitetura de software profissional, utilizando Programação Orientada a Objetos (POO) para regras de negócio e SQL puro para manipulação de dados complexos. O sistema gerencia utilizadores, produtos e pedidos, simulando um ambiente real de loja virtual com controlo de estoque e segurança.
+Funcionamento e Regras de Negócio
+Gestão de Pedidos e Transações: O sistema utiliza transações SQL para garantir a integridade dos dados. Ao finalizar um pedido, a API valida o estoque, registra a venda e atualiza a quantidade disponível em uma única operação atômica. Caso ocorra qualquer erro, o sistema realiza um Rollback automático.
 
-Destaques Técnicos
-Programação Orientada a Objetos (POO): O código foge do padrão funcional simples, utilizando Classes e Métodos Estáticos para encapsular a lógica de acesso ao banco de dados e regras de negócio.
+Segurança e Níveis de Acesso: A autenticação é baseada em JSON Web Tokens (JWT). O sistema diferencia permissões entre clientes e administradores, protegendo rotas críticas como a criação de produtos e a gestão de estoque através de Middlewares de autorização.
 
-Integridade de Dados (SQL ACID): O sistema implementa transações manuais no banco de dados SQLite. Durante a finalização de um pedido, o sistema garante que a criação do registo e a baixa no estoque ocorram simultaneamente; se uma falha acontecer, toda a operação é revertida (Rollback).
+Respostas HTTP Semânticas: A API segue rigorosamente os padrões de resposta HTTP, retornando o Status 201 Created após a criação bem-sucedida de pedidos e registros, confirmando a persistência correta no banco de dados SQLite.
 
-Segurança e Autenticação: Utilização de JSON Web Tokens (JWT) para controlo de sessões stateless. O sistema diferencia permissões entre Administradores (que podem criar produtos) e Clientes (que podem apenas comprar), além de utilizar hash (Bcrypt) para proteger as senhas.
+Estrutura Técnica
+Persistência: Banco de dados relacional SQLite utilizando SQL puro para máxima performance e controle sobre as queries.
 
-Tecnologias e Arquitetura
-Linguagem: Node.js (JavaScript)
+Segurança: Criptografia de senhas com a biblioteca Bcrypt e proteção de rotas com JWT.
 
-Framework: Express
+Arquitetura: Padrão MVC (Model-View-Controller) com separação clara entre lógica de banco de dados, rotas e controladores.
 
-Banco de Dados: SQLite3 (SQL Puro)
+Endpoints da API
+Listar Produtos (Público): GET http://localhost:3000/api/products
 
-Segurança: JWT e Bcryptjs
+Autenticação (Login): POST http://localhost:3000/api/login
 
-Padrão de Projeto: MVC (Model-View-Controller) com Service Pattern
+Finalizar Compra (Checkout): POST http://localhost:3000/api/checkout
 
-Funcionalidades Principais
-Cadastro de Utilizadores: Criação de contas com validação de e-mail único e criptografia de senha.
+Cadastro de Usuário: POST http://localhost:3000/api/register
 
-Gestão de Produtos: Rotas protegidas para criação de produtos, exclusivas para administradores.
+Guia de Testes
+Instalação: Execute o comando npm install para baixar todas as dependências do projeto.
 
-Carrinho de Compras: Sistema de checkout que recebe uma lista de itens, calcula totais e atualiza o inventário em tempo real.
+Povoamento: Utilize o comando node seed.js para criar as tabelas e inserir os dados iniciais de teste.
 
-Automação (Seed): Script incluído para povoar o banco de dados com dados de teste instantaneamente.
+Execução: Inicie o servidor com o comando npm run dev.
 
-Como Executar o Projeto
-Instalação: Execute o comando npm install no terminal para baixar as dependências listadas.
-
-Configuração: O projeto já inclui configurações padrão, mas pode ajustar as variáveis no arquivo .env se necessário.
-
-Popular Banco de Dados: Execute node seed.js para criar as tabelas e inserir utilizadores e produtos de teste.
-
-Iniciar Servidor: Execute npm run dev para iniciar a API em modo de desenvolvimento.
-
-Testes: Utilize ferramentas como Postman ou Insomnia para realizar requisições nas rotas disponíveis (ex: /api/login, /api/checkout).
+Fluxo de Compra: Realize o login via POST na rota de login para obter o token de acesso e utilize este token no cabeçalho de autorização para realizar o checkout e receber o status 201 de confirmação.
