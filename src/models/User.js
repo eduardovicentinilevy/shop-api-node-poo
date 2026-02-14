@@ -1,15 +1,28 @@
+const db = require('../config/database');
 const bcrypt = require('bcryptjs');
 
 class User {
-  constructor(name, email, password, role = 'customer') {
-    this.name = name;
-    this.email = email;
-    this.password = password;
-    this.role = role;
+  static create(name, email, password) {
+    return new Promise(async (resolve, reject) => {
+      const hash = await bcrypt.hash(password, 8);
+      db.run(
+        `INSERT INTO users (name, email, password) VALUES (?, ?, ?)`,
+        [name, email, hash],
+        function (err) {
+          if (err) reject(err);
+          else resolve({ id: this.lastID, name, email, role: 'customer' });
+        }
+      );
+    });
   }
 
-  async hashPassword() {
-    this.password = await bcrypt.hash(this.password, 8);
+  static findByEmail(email) {
+    return new Promise((resolve, reject) => {
+      db.get(`SELECT * FROM users WHERE email = ?`, [email], (err, row) => {
+        if (err) reject(err);
+        else resolve(row);
+      });
+    });
   }
 }
 

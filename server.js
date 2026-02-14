@@ -1,19 +1,18 @@
 require('dotenv').config();
 const express = require('express');
 const db = require('./src/config/database');
+const routes = require('./src/routes');
 
 const app = express();
 app.use(express.json());
 
-// Rota inicial para teste
+app.use('/api', routes);
+
 app.get('/', (req, res) => {
-  res.json({ 
-    message: "API Shop-POO ativa!",
-    status: "Conectado ao SQLite"
-  });
+  res.json({ message: "API Running" });
 });
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`🚀 Servidor rodando em http://localhost:${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`);
 });

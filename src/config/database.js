@@ -1,11 +1,9 @@
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 
-// Cria o arquivo do banco na raiz do projeto
 const db = new sqlite3.Database(path.resolve(__dirname, '..', '..', 'database.db'));
 
 db.serialize(() => {
-  // Tabela de Usuários
   db.run(`CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
@@ -14,7 +12,6 @@ db.serialize(() => {
     role TEXT DEFAULT 'customer'
   )`);
 
-  // Tabela de Produtos
   db.run(`CREATE TABLE IF NOT EXISTS products (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
@@ -22,7 +19,6 @@ db.serialize(() => {
     stock INTEGER NOT NULL
   )`);
 
-  // Tabela de Pedidos
   db.run(`CREATE TABLE IF NOT EXISTS orders (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER,
@@ -31,7 +27,14 @@ db.serialize(() => {
     FOREIGN KEY(user_id) REFERENCES users(id)
   )`);
 
-  console.log("Banco de dados e tabelas prontos!");
+  db.run(`CREATE TABLE IF NOT EXISTS order_items (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    order_id INTEGER,
+    product_id INTEGER,
+    quantity INTEGER,
+    FOREIGN KEY(order_id) REFERENCES orders(id),
+    FOREIGN KEY(product_id) REFERENCES products(id)
+  )`);
 });
 
 module.exports = db;
